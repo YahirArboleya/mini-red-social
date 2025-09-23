@@ -11,25 +11,24 @@ export default function Navbar({ user, setUser }) {
   };
 
   return (
-    <nav className="bg-gray-800 shadow-lg p-4 sticky top-0 z-50">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="font-bold text-2xl">
-          <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 text-transparent bg-clip-text">MiniRed</span>
+    <nav>
+      <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Link to="/" style={{ fontWeight: "bold", fontSize: "1.5rem", background: "linear-gradient(90deg, #7c3aed, #ec4899)", WebkitBackgroundClip: "text", color: "transparent" }}>
+          MiniRed
         </Link>
 
-        <div className="flex items-center gap-4">
-          <Link to="/" className="text-gray-300 hover:text-white transition duration-300">Inicio</Link>
-
+        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          <Link to="/">Inicio</Link>
           {user ? (
             <>
-              <Link to="/profile" className="text-gray-300 hover:text-white transition duration-300">Perfil</Link>
-              <button onClick={handleLogout} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-sm font-semibold transition duration-300">Cerrar sesión</button>
-              <span className="text-gray-400 text-sm hidden sm:block">Hola, {user.name}</span>
+              <Link to="/profile">Perfil</Link>
+              <button onClick={handleLogout} className="button-secondary">Cerrar sesión</button>
+              <span style={{ color: "#aaa", fontSize: "0.9rem" }}>Hola, {user.name}</span>
             </>
           ) : (
             <>
-              <Link to="/login" className="px-4 py-2 border border-gray-600 rounded-full text-gray-300 hover:bg-gray-700 transition duration-300 text-sm">Iniciar sesión</Link>
-              <Link to="/register" className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-semibold transition duration-300 text-sm">Registrarse</Link>
+              <Link to="/login" className="button-secondary">Iniciar sesión</Link>
+              <Link to="/register" className="button-primary">Registrarse</Link>
             </>
           )}
         </div>

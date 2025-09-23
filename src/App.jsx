@@ -16,9 +16,9 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-900 text-gray-100 font-sans">
+      <div>
         <Navbar user={user} setUser={setUser} />
-        <div className="container mx-auto p-4">
+        <div className="container">
           <Routes>
             <Route path="/" element={<Home user={user} />} />
             <Route path="/login" element={<Login onLogin={setUser} />} />
