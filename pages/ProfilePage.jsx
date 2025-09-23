@@ -1,4 +1,3 @@
-// src/pages/ProfilePage.jsx
 import React, { useEffect, useState } from "react";
 import { getCurrentUser, getUsers, saveUsers, setCurrentUser } from "../utils/storage";
 import { useNavigate } from "react-router-dom";
@@ -49,7 +48,7 @@ export default function ProfilePage({ onUpdateUser }) {
   if (!user) return null;
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-6 rounded shadow">
+    <div className="max-w-lg mx-auto bg-white p-6 rounded shadow mt-10">
       <h2 className="text-2xl mb-4">Mi perfil</h2>
       {message && <div className="bg-green-100 text-green-700 p-2 mb-4 rounded">{message}</div>}
       <div className="mb-4">
@@ -59,7 +58,6 @@ export default function ProfilePage({ onUpdateUser }) {
           <input type="file" accept="image/*" onChange={handleAvatarChange} />
         </div>
       </div>
-
       <div className="space-y-3">
         <input className="w-full p-2 border rounded" value={name} onChange={(e) => setName(e.target.value)} />
         <textarea className="w-full p-2 border rounded" rows="3" value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Bio (qué te gusta, descripción corta)"></textarea>

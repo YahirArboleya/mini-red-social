@@ -1,4 +1,3 @@
-// src/components/Post.jsx
 import React, { useState } from 'react';
 
 export default function Post({ post, onLike, onComment }) {
@@ -20,7 +19,6 @@ export default function Post({ post, onLike, onComment }) {
       </div>
       <p className="mb-3">{post.content}</p>
       
-      {/* Botones de interacción */}
       <div className="flex items-center text-sm text-gray-600 mb-2">
         <button onClick={() => onLike(post.id)} className="mr-4 hover:text-blue-600">
           👍 Me gusta ({post.likes})
@@ -28,14 +26,12 @@ export default function Post({ post, onLike, onComment }) {
         <span>💬 Comentarios ({post.comments.length})</span>
       </div>
       
-      {/* Sección de comentarios */}
       <div className="border-t pt-2">
         {post.comments.map((comment, index) => (
           <p key={index} className="text-sm text-gray-700">{comment}</p>
         ))}
       </div>
       
-      {/* Formulario para comentar */}
       <form onSubmit={handleCommentSubmit} className="mt-2">
         <input
           type="text"

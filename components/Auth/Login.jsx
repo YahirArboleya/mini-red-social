@@ -1,4 +1,3 @@
-// src/components/Auth/Login.jsx
 import React, { useState } from "react";
 import { getUsers, setCurrentUser } from "../../utils/storage";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +23,7 @@ export default function Login({ onLogin }) {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-6 rounded shadow">
+    <div className="max-w-md mx-auto bg-white p-6 rounded shadow mt-10">
       <h2 className="text-2xl mb-4">Iniciar sesión</h2>
       {error && <div className="bg-red-100 text-red-700 p-2 mb-4 rounded">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-3">
@@ -35,3 +34,4 @@ export default function Login({ onLogin }) {
     </div>
   );
 }
+ 

@@ -1,4 +1,3 @@
-// src/components/CreatePost.jsx
 import React, { useState } from 'react';
 
 export default function CreatePost({ user, onNewPost }) {
@@ -8,7 +7,7 @@ export default function CreatePost({ user, onNewPost }) {
     e.preventDefault();
     if (postContent.trim()) {
       const newPost = {
-        id: Date.now(), // Un ID único simple
+        id: Date.now(),
         author: user.name,
         content: postContent,
         likes: 0,

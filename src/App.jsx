@@ -1,6 +1,4 @@
-// src/App.jsx
-import { Routes, Route } from "react-router-dom";
-
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import Register from "../components/Auth/Register";
 import ProfilePage from "../pages/ProfilePage";
 import { getCurrentUser } from "../utils/storage";
@@ -17,17 +15,19 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Navbar user={user} setUser={setUser} />
-      <div className="container mx-auto p-4">
-        <Routes>
-          <Route path="/" element={<Home user={user} />} />
-          <Route path="/login" element={<Login onLogin={setUser} />} />
-          <Route path="/register" element={<Register onRegistered={setUser} />} />
-          <Route path="/profile" element={<ProfilePage onUpdateUser={setUser} />} />
-        </Routes>
+    <Router>
+      <div className="min-h-screen bg-gray-900 text-gray-100 font-sans">
+        <Navbar user={user} setUser={setUser} />
+        <div className="container mx-auto p-4">
+          <Routes>
+            <Route path="/" element={<Home user={user} />} />
+            <Route path="/login" element={<Login onLogin={setUser} />} />
+            <Route path="/register" element={<Register onRegistered={setUser} />} />
+            <Route path="/profile" element={<ProfilePage onUpdateUser={setUser} />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 
