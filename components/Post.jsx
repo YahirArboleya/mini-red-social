@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { toggleLike } from "../utils/storage";
+import { Link } from "react-router-dom";
 
 function Post({ post, currentUser, onLike }) {
   const [likes, setLikes] = useState(post.likes || []);
@@ -13,13 +14,16 @@ function Post({ post, currentUser, onLike }) {
     }
     const updatedPost = toggleLike(post.id, currentUser.id);
     setLikes(updatedPost.likes);
-    onLike(updatedPost); // actualiza el feed
+    onLike(updatedPost);
   };
 
   return (
     <div className="card" style={{ marginBottom: "1rem" }}>
       <div style={{ marginBottom: "0.5rem" }}>
-        <strong>@{post.author.username}</strong> <small>{post.date}</small>
+        <Link to={`/user/${post.author.id}`}>
+          <strong>@{post.author.username}</strong>
+        </Link>{" "}
+        <small>{post.date}</small>
       </div>
       <p>{post.content}</p>
       {post.image && (

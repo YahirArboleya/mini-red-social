@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Home from "../pages/Home";
 import Login from "../components/Auth/Login";
+import UserProfilePage from "../pages/UserProfilePage";
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -24,6 +26,7 @@ function App() {
             <Route path="/login" element={<Login onLogin={setUser} />} />
             <Route path="/register" element={<Register onRegistered={setUser} />} />
             <Route path="/profile" element={<ProfilePage onUpdateUser={setUser} />} />
+            <Route path="/user/:id" element={<UserProfilePage />} />
           </Routes>
         </div>
       </div>
