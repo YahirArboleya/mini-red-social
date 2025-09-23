@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { toggleLike } from "../utils/storage";
+import { toggleLike, addComment } from "../utils/storage";
 import { Link } from "react-router-dom";
 
-function Post({ post, currentUser, onLike }) {
+function Post({ post, currentUser, onLike, onComment }) {
   const [likes, setLikes] = useState(post.likes || []);
+  const [commentText, setCommentText] = useState("");
 
   const hasLiked = currentUser && likes.includes(currentUser.id);
 
@@ -17,24 +18,45 @@ function Post({ post, currentUser, onLike }) {
     onLike(updatedPost);
   };
 
+  const handleAddComment = (e) => {
+    e.preventDefault();
+    if (!currentUser) {
+      alert("Debes iniciar sesión para comentar");
+      return;
+    }
+    if (commentText.trim() === "") return;
+
+    const comment = {
+      id: Date.now(),
+      userId: currentUser.id,
+      username: currentUser.username,
+      text: commentText,
+      date: new Date().toLocaleString(),
+    };
+
+    const updatedPost = addComment(post.id, comment);
+    setCommentText("");
+    onComment(updatedPost);
+  };
+
   return (
     <div className="card" style={{ marginBottom: "1rem" }}>
       <div style={{ marginBottom: "0.5rem" }}>
         <Link
           to={`/user/${post.author.id}`}
           style={{
-            color: "#629cfaff", // azul brillante
+            color: "#3b82f6",
             fontWeight: "bold",
             textDecoration: "none",
           }}
-          onMouseOver={(e) => (e.target.style.textDecoration = "underline")}
-          onMouseOut={(e) => (e.target.style.textDecoration = "none")}
         >
           @{post.author.username}
         </Link>{" "}
         <small style={{ color: "#aaa" }}>{post.date}</small>
       </div>
+
       <p>{post.content}</p>
+
       {post.image && (
         <img
           src={post.image}
@@ -42,10 +64,13 @@ function Post({ post, currentUser, onLike }) {
           style={{
             marginTop: "0.5rem",
             maxWidth: "100%",
+            maxHeight: "250px",
             borderRadius: "8px",
+            objectFit: "cover",
           }}
         />
       )}
+
       <div style={{ marginTop: "0.5rem" }}>
         <button
           onClick={handleLike}
@@ -57,6 +82,45 @@ function Post({ post, currentUser, onLike }) {
         >
           {hasLiked ? "❤️ Me gusta" : "🤍 Me gusta"} ({likes.length})
         </button>
+      </div>
+
+      {/* Sección de comentarios */}
+      <div style={{ marginTop: "1rem" }}>
+        <form
+          onSubmit={handleAddComment}
+          style={{ display: "flex", gap: "0.5rem" }}
+        >
+          <input
+            type="text"
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            placeholder="Escribe un comentario..."
+            className="input"
+            style={{ flex: 1 }}
+          />
+          <button type="submit" className="button-primary">
+            Comentar
+          </button>
+        </form>
+
+        <div style={{ marginTop: "0.5rem" }}>
+          {post.comments && post.comments.length > 0 ? (
+            post.comments.map((c) => (
+              <div
+                key={c.id}
+                style={{ marginTop: "0.25rem", paddingLeft: "0.5rem" }}
+              >
+                <strong>@{c.username}</strong>{" "}
+                <small style={{ color: "#aaa" }}>{c.date}</small>
+                <p style={{ margin: "0.25rem 0" }}>{c.text}</p>
+              </div>
+            ))
+          ) : (
+            <p style={{ color: "#aaa", fontSize: "0.9rem" }}>
+              No hay comentarios aún
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

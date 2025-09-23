@@ -2,7 +2,6 @@
 // Manejo de Usuarios
 // ================================
 
-// Obtener todos los usuarios
 export const getUsers = () => {
   try {
     const users = localStorage.getItem("users");
@@ -13,7 +12,6 @@ export const getUsers = () => {
   }
 };
 
-// Guardar usuarios
 export const saveUsers = (users) => {
   try {
     localStorage.setItem("users", JSON.stringify(users));
@@ -22,11 +20,8 @@ export const saveUsers = (users) => {
   }
 };
 
-// Registrar un nuevo usuario
 export const registerUser = (username, email, password) => {
   const users = getUsers();
-
-  // Verificar si ya existe el email
   const exists = users.some((u) => u.email === email);
   if (exists) {
     return { success: false, message: "El email ya está registrado." };
@@ -36,8 +31,10 @@ export const registerUser = (username, email, password) => {
     id: Date.now(),
     username,
     email,
-    password, // ⚠️ en producción deberías encriptar esto
+    password,
     joined: new Date().toLocaleDateString(),
+    bio: "",
+    avatar: "",
   };
 
   users.push(newUser);
@@ -47,40 +44,34 @@ export const registerUser = (username, email, password) => {
   return { success: true, user: newUser };
 };
 
-// Iniciar sesión
 export const loginUser = (email, password) => {
   const users = getUsers();
   const user = users.find((u) => u.email === email && u.password === password);
-
   if (!user) {
     return { success: false, message: "Credenciales incorrectas." };
   }
-
   setCurrentUser(user);
   return { success: true, user };
 };
 
-// Obtener usuario actual
 export const getCurrentUser = () => {
   try {
     const user = localStorage.getItem("currentUser");
     return user ? JSON.parse(user) : null;
   } catch (e) {
-    console.error("Error al obtener el usuario actual de localStorage", e);
+    console.error("Error al obtener el usuario actual", e);
     return null;
   }
 };
 
-// Establecer usuario actual
 export const setCurrentUser = (user) => {
   try {
     localStorage.setItem("currentUser", JSON.stringify(user));
   } catch (e) {
-    console.error("Error al establecer el usuario actual en localStorage", e);
+    console.error("Error al guardar el usuario actual", e);
   }
 };
 
-// Cerrar sesión
 export const logoutUser = () => {
   try {
     localStorage.removeItem("currentUser");
@@ -89,68 +80,83 @@ export const logoutUser = () => {
   }
 };
 
-
-
 // ================================
 // Manejo de Posts
 // ================================
 
-// Obtener posts
 export const getAllPosts = () => {
   try {
     const posts = localStorage.getItem("posts");
     return posts ? JSON.parse(posts) : [];
   } catch (e) {
-    console.error("Error al obtener las publicaciones de localStorage", e);
+    console.error("Error al obtener publicaciones", e);
     return [];
   }
 };
 
-// Guardar posts
 export const savePosts = (posts) => {
   try {
     localStorage.setItem("posts", JSON.stringify(posts));
   } catch (e) {
-    console.error("Error al guardar las publicaciones en localStorage", e);
+    console.error("Error al guardar publicaciones", e);
   }
 };
 
-// Crear un nuevo post (texto + imagen opcional)
-export const createPost = (content, image, author) => {
+export const createPost = (content, author, image = null) => {
   const posts = getAllPosts();
-
   const newPost = {
     id: Date.now(),
     content,
-    image, // base64 si se subió una imagen
-    author, // { id, username }
+    author,
+    image,
     date: new Date().toLocaleString(),
-    likes: [], // array de userId que dieron like
+    likes: [],
     comments: [],
   };
-
-  posts.unshift(newPost); // más nuevo primero
+  posts.unshift(newPost);
   savePosts(posts);
-
   return newPost;
 };
 
-// Dar / quitar like (solo 1 por usuario)
+// ================================
+// Likes únicos
+// ================================
+
 export const toggleLike = (postId, userId) => {
   const posts = getAllPosts();
-  const post = posts.find((p) => p.id === postId);
+  const index = posts.findIndex((p) => p.id === postId);
+  if (index >= 0) {
+    const post = posts[index];
+    if (!post.likes) post.likes = [];
 
-  if (!post) return null;
-  if (!post.likes) post.likes = [];
+    if (post.likes.includes(userId)) {
+      post.likes = post.likes.filter((id) => id !== userId);
+    } else {
+      post.likes.push(userId);
+    }
 
-  if (post.likes.includes(userId)) {
-    // quitar like
-    post.likes = post.likes.filter((id) => id !== userId);
-  } else {
-    // dar like
-    post.likes.push(userId);
+    posts[index] = post;
+    savePosts(posts);
+    return post;
   }
+  return null;
+};
 
-  savePosts(posts);
-  return post;
+// ================================
+// Comentarios
+// ================================
+
+export const addComment = (postId, comment) => {
+  const posts = getAllPosts();
+  const index = posts.findIndex((p) => p.id === postId);
+  if (index >= 0) {
+    const post = posts[index];
+    if (!post.comments) post.comments = [];
+    post.comments.push(comment);
+
+    posts[index] = post;
+    savePosts(posts);
+    return post;
+  }
+  return null;
 };
