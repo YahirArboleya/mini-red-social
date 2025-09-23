@@ -14,6 +14,12 @@ function App() {
 
   useEffect(() => {
     setUser(getCurrentUser());
+
+    // Aplicar tema guardado
+    const theme = localStorage.getItem("theme");
+    if (theme === "light") {
+      document.body.classList.add("light-mode");
+    }
   }, []);
 
   return (

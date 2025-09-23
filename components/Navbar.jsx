@@ -23,6 +23,19 @@ export default function Navbar({ user, setUser }) {
             <>
               <Link to="/profile">Perfil</Link>
               <button onClick={handleLogout} className="button-secondary">Cerrar sesión</button>
+              <button
+              onClick={() => {
+                document.body.classList.toggle("light-mode");
+                localStorage.setItem(
+                  "theme",
+                  document.body.classList.contains("light-mode") ? "light" : "dark"
+                );
+              }}
+              className="button-secondary"
+              >
+              🌓 Tema
+              </button>
+
               <span style={{ color: "#aaa", fontSize: "0.9rem" }}>Hola, {user.name}</span>
             </>
           ) : (
