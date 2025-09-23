@@ -1,5 +1,8 @@
-// Funciones para manejar la lógica de almacenamiento en localStorage
+// ================================
+// Manejo de Usuarios
+// ================================
 
+// Obtener todos los usuarios
 export const getUsers = () => {
   try {
     const users = localStorage.getItem("users");
@@ -10,6 +13,7 @@ export const getUsers = () => {
   }
 };
 
+// Guardar usuarios
 export const saveUsers = (users) => {
   try {
     localStorage.setItem("users", JSON.stringify(users));
@@ -18,6 +22,45 @@ export const saveUsers = (users) => {
   }
 };
 
+// Registrar un nuevo usuario
+export const registerUser = (username, email, password) => {
+  const users = getUsers();
+
+  // Verificar si ya existe el email
+  const exists = users.some((u) => u.email === email);
+  if (exists) {
+    return { success: false, message: "El email ya está registrado." };
+  }
+
+  const newUser = {
+    id: Date.now(),
+    username,
+    email,
+    password, // ⚠️ Nota: en producción deberías encriptar esto
+    joined: new Date().toLocaleDateString(),
+  };
+
+  users.push(newUser);
+  saveUsers(users);
+  setCurrentUser(newUser);
+
+  return { success: true, user: newUser };
+};
+
+// Iniciar sesión
+export const loginUser = (email, password) => {
+  const users = getUsers();
+
+  const user = users.find((u) => u.email === email && u.password === password);
+  if (!user) {
+    return { success: false, message: "Credenciales incorrectas." };
+  }
+
+  setCurrentUser(user);
+  return { success: true, user };
+};
+
+// Obtener usuario actual
 export const getCurrentUser = () => {
   try {
     const user = localStorage.getItem("currentUser");
@@ -28,6 +71,7 @@ export const getCurrentUser = () => {
   }
 };
 
+// Establecer usuario actual
 export const setCurrentUser = (user) => {
   try {
     localStorage.setItem("currentUser", JSON.stringify(user));
@@ -36,6 +80,7 @@ export const setCurrentUser = (user) => {
   }
 };
 
+// Cerrar sesión
 export const logoutUser = () => {
   try {
     localStorage.removeItem("currentUser");
@@ -44,6 +89,9 @@ export const logoutUser = () => {
   }
 };
 
+// ================================
+// Manejo de Posts
+// ================================
 export const getAllPosts = () => {
   try {
     const posts = localStorage.getItem("posts");
@@ -60,4 +108,21 @@ export const savePosts = (posts) => {
   } catch (e) {
     console.error("Error al guardar las publicaciones en localStorage", e);
   }
+};
+
+// Crear un nuevo post
+export const createPost = (content, author) => {
+  const posts = getAllPosts();
+
+  const newPost = {
+    id: Date.now(),
+    content,
+    author,
+    date: new Date().toLocaleString(),
+  };
+
+  posts.unshift(newPost); // lo agregamos al inicio para que sea más reciente
+  savePosts(posts);
+
+  return newPost;
 };
