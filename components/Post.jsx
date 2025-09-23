@@ -20,17 +20,30 @@ function Post({ post, currentUser, onLike }) {
   return (
     <div className="card" style={{ marginBottom: "1rem" }}>
       <div style={{ marginBottom: "0.5rem" }}>
-        <Link to={`/user/${post.author.id}`}>
-          <strong>@{post.author.username}</strong>
+        <Link
+          to={`/user/${post.author.id}`}
+          style={{
+            color: "#629cfaff", // azul brillante
+            fontWeight: "bold",
+            textDecoration: "none",
+          }}
+          onMouseOver={(e) => (e.target.style.textDecoration = "underline")}
+          onMouseOut={(e) => (e.target.style.textDecoration = "none")}
+        >
+          @{post.author.username}
         </Link>{" "}
-        <small>{post.date}</small>
+        <small style={{ color: "#aaa" }}>{post.date}</small>
       </div>
       <p>{post.content}</p>
       {post.image && (
         <img
           src={post.image}
           alt="post"
-          style={{ marginTop: "0.5rem", maxWidth: "100%", borderRadius: "8px" }}
+          style={{
+            marginTop: "0.5rem",
+            maxWidth: "100%",
+            borderRadius: "8px",
+          }}
         />
       )}
       <div style={{ marginTop: "0.5rem" }}>
