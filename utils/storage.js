@@ -36,7 +36,7 @@ export const registerUser = (username, email, password) => {
     id: Date.now(),
     username,
     email,
-    password, // ⚠️ Nota: en producción deberías encriptar esto
+    password, // ⚠️ en producción deberías encriptar esto
     joined: new Date().toLocaleDateString(),
   };
 
@@ -50,8 +50,8 @@ export const registerUser = (username, email, password) => {
 // Iniciar sesión
 export const loginUser = (email, password) => {
   const users = getUsers();
-
   const user = users.find((u) => u.email === email && u.password === password);
+
   if (!user) {
     return { success: false, message: "Credenciales incorrectas." };
   }
@@ -89,9 +89,13 @@ export const logoutUser = () => {
   }
 };
 
+
+
 // ================================
 // Manejo de Posts
 // ================================
+
+// Obtener posts
 export const getAllPosts = () => {
   try {
     const posts = localStorage.getItem("posts");
@@ -102,6 +106,7 @@ export const getAllPosts = () => {
   }
 };
 
+// Guardar posts
 export const savePosts = (posts) => {
   try {
     localStorage.setItem("posts", JSON.stringify(posts));
@@ -110,19 +115,42 @@ export const savePosts = (posts) => {
   }
 };
 
-// Crear un nuevo post
-export const createPost = (content, author) => {
+// Crear un nuevo post (texto + imagen opcional)
+export const createPost = (content, image, author) => {
   const posts = getAllPosts();
 
   const newPost = {
     id: Date.now(),
     content,
-    author,
+    image, // base64 si se subió una imagen
+    author, // { id, username }
     date: new Date().toLocaleString(),
+    likes: [], // array de userId que dieron like
+    comments: [],
   };
 
-  posts.unshift(newPost); // lo agregamos al inicio para que sea más reciente
+  posts.unshift(newPost); // más nuevo primero
   savePosts(posts);
 
   return newPost;
+};
+
+// Dar / quitar like (solo 1 por usuario)
+export const toggleLike = (postId, userId) => {
+  const posts = getAllPosts();
+  const post = posts.find((p) => p.id === postId);
+
+  if (!post) return null;
+  if (!post.likes) post.likes = [];
+
+  if (post.likes.includes(userId)) {
+    // quitar like
+    post.likes = post.likes.filter((id) => id !== userId);
+  } else {
+    // dar like
+    post.likes.push(userId);
+  }
+
+  savePosts(posts);
+  return post;
 };
