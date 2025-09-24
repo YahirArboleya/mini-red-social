@@ -1,30 +1,39 @@
 import React, { useState } from "react";
 import { toggleLike, addComment } from "../utils/storage";
 import { Link } from "react-router-dom";
+import { useNotifications } from "./NotificationContext";
 
 function Post({ post, currentUser, onLike, onComment }) {
   const [likes, setLikes] = useState(post.likes || []);
   const [commentText, setCommentText] = useState("");
+  const { addNotification } = useNotifications();
 
   const hasLiked = currentUser && likes.includes(currentUser.id);
 
   const handleLike = () => {
     if (!currentUser) {
-      alert("Debes iniciar sesión para dar like");
+      addNotification("Debes iniciar sesión para dar like", "error");
       return;
     }
     const updatedPost = toggleLike(post.id, currentUser.id);
     setLikes(updatedPost.likes);
     onLike(updatedPost);
+    addNotification(
+      hasLiked ? "Has quitado tu like" : "Te gustó esta publicación",
+      "success"
+    );
   };
 
   const handleAddComment = (e) => {
     e.preventDefault();
     if (!currentUser) {
-      alert("Debes iniciar sesión para comentar");
+      addNotification("Debes iniciar sesión para comentar", "error");
       return;
     }
-    if (commentText.trim() === "") return;
+    if (commentText.trim() === "") {
+      addNotification("El comentario no puede estar vacío", "error");
+      return;
+    }
 
     const comment = {
       id: Date.now(),
@@ -37,6 +46,7 @@ function Post({ post, currentUser, onLike, onComment }) {
     const updatedPost = addComment(post.id, comment);
     setCommentText("");
     onComment(updatedPost);
+    addNotification("Comentario agregado con éxito", "success");
   };
 
   return (

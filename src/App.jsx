@@ -7,7 +7,7 @@ import Navbar from "../components/Navbar";
 import Home from "../pages/Home";
 import Login from "../components/Auth/Login";
 import UserProfilePage from "../pages/UserProfilePage";
-
+import { NotificationProvider } from "../components/NotificationContext";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -23,20 +23,22 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <div>
-        <Navbar user={user} setUser={setUser} />
-        <div className="container">
-          <Routes>
-            <Route path="/" element={<Home user={user} />} />
-            <Route path="/login" element={<Login onLogin={setUser} />} />
-            <Route path="/register" element={<Register onRegistered={setUser} />} />
-            <Route path="/profile" element={<ProfilePage onUpdateUser={setUser} />} />
-            <Route path="/user/:id" element={<UserProfilePage />} />
-          </Routes>
+    <NotificationProvider>
+      <Router>
+        <div>
+          <Navbar user={user} setUser={setUser} />
+          <div className="container">
+            <Routes>
+              <Route path="/" element={<Home user={user} />} />
+              <Route path="/login" element={<Login onLogin={setUser} />} />
+              <Route path="/register" element={<Register onRegistered={setUser} />} />
+              <Route path="/profile" element={<ProfilePage onUpdateUser={setUser} />} />
+              <Route path="/user/:id" element={<UserProfilePage />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </NotificationProvider>
   );
 }
 
