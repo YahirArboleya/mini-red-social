@@ -96,6 +96,18 @@ textarea {
   box-sizing: border-box; /* asegura que el padding no rompa el layout */
 }
 
+input{
+  resize: none; /* evita que se pueda cambiar el tamaño con el mouse */
+  width: 100%;
+  padding: 10px;         /* espacio interno */
+  border-radius: 8px;    /* bordes redondeados */
+  border: none;          /* quita el borde gris feo */
+  outline: none;         /* evita borde azul al hacer clic */
+  background: #282c44;   /* mismo tono que tu card */
+  color: white;          /* texto blanco */
+  font-size: 1rem;
+  box-sizing: border-box; 
+}
 
 /* Tarjetas */
 .card {
