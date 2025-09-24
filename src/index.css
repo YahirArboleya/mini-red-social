@@ -83,7 +83,17 @@ input::placeholder, textarea::placeholder {
 }
 
 textarea {
-  resize: none; /* Evita que se pueda cambiar el tamaño con el mouse */
+  resize: none; /* evita que se pueda cambiar el tamaño con el mouse */
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;         /* espacio interno */
+  border-radius: 8px;    /* bordes redondeados */
+  border: none;          /* quita el borde gris feo */
+  outline: none;         /* evita borde azul al hacer clic */
+  background: #282c44;   /* mismo tono que tu card */
+  color: white;          /* texto blanco */
+  font-size: 1rem;
+  box-sizing: border-box; /* asegura que el padding no rompa el layout */
 }
 
 
