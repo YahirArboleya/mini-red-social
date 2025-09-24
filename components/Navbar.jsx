@@ -1,5 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { logoutUser } from "../utils/storage";
+import NotificationBell from "./NotificationBell";
+
 
 export default function Navbar({ user, setUser }) {
   const navigate = useNavigate();
@@ -22,6 +24,7 @@ export default function Navbar({ user, setUser }) {
           {user ? (
             <>
               <Link to="/profile">Perfil</Link>
+               <NotificationBell />
               <button onClick={handleLogout} className="button-secondary">Cerrar sesión</button>
               <button
               onClick={() => {

@@ -1,48 +1,38 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 const NotificationContext = createContext();
 
 export const useNotifications = () => useContext(NotificationContext);
 
-export function NotificationProvider({ children }) {
-  const [messages, setMessages] = useState([]);
+export const NotificationProvider = ({ children }) => {
+  const [notifications, setNotifications] = useState([]);
 
-  const addNotification = (text) => {
-    const id = Date.now();
-    setMessages((prev) => [...prev, { id, text }]);
+  const addNotification = (message, type = "info") => {
+    const newNotif = {
+      id: Date.now(),
+      message,
+      type,
+      read: false,
+      date: new Date().toLocaleString(),
+    };
+    setNotifications((prev) => [newNotif, ...prev]); // se guarda historial
+  };
 
-    // Auto eliminar después de 3s
-    setTimeout(() => {
-      setMessages((prev) => prev.filter((msg) => msg.id !== id));
-    }, 3000);
+  const markAsRead = (id) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+    );
+  };
+
+  const clearNotifications = () => {
+    setNotifications([]);
   };
 
   return (
-    <NotificationContext.Provider value={{ addNotification }}>
+    <NotificationContext.Provider
+      value={{ notifications, addNotification, markAsRead, clearNotifications }}
+    >
       {children}
-
-      {/* Bandeja de notificaciones */}
-      <div style={{
-        position: "fixed",
-        top: "1rem",
-        right: "1rem",
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.5rem",
-        zIndex: 1000
-      }}>
-        {messages.map((msg) => (
-          <div key={msg.id} style={{
-            background: "#333",
-            color: "#fff",
-            padding: "0.75rem 1rem",
-            borderRadius: "6px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.2)"
-          }}>
-            {msg.text}
-          </div>
-        ))}
-      </div>
     </NotificationContext.Provider>
   );
-}
+};
