@@ -15,8 +15,9 @@ export default function Navbar({ user, setUser }) {
   return (
     <nav>
       <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <img src="/img/checkpoint-logo.png" alt="Checkpoint" style={{ height: "40px" }} />
         <Link to="/" style={{ fontWeight: "bold", fontSize: "1.5rem", background: "linear-gradient(90deg, #7c3aed, #ec4899)", WebkitBackgroundClip: "text", color: "transparent" }}>
-          MiniRed
+          Checkpoint
         </Link>
 
         <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
